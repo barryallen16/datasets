@@ -1,0 +1,169 @@
+program,code
+1,"import numpy as np import pandas as pd np.random.seed(0)
+sample_data = np.random.normal(loc=50, scale=15, size=1000) sample_series = pd.Series(sample_data)
+min_value = sample_series.min() max_value = sample_series.max() mean_value = sample_series.mean() median_value = sample_series.median()
+quantiles = sample_series.quantile([0.25, 0.5, 0.75]) std_value = sample_series.std()
+variance = sample_series.var() summary_stats = sample_series.describe() print(f""Minimum value: {min_value:.2f}"") print(f""Maximum value: {max_value:.2f}"")
+print(f""Mean: {mean_value:.2f}"") print(f""Median: {median_value:.2f}"") print(f""Quantiles:"")
+print(quantiles)
+print(f""Standard deviation: {std_value:.2f}"") print(f""Variance: {variance:.2f}"") print(f""Summary statistics:\n{summary_stats}"")"
+2,"import pandas as pd
+import matplotlib.pyplot as plt import seaborn as sns
+df = pd.read_csv(""D:/Naveed/Clg/SEM 5/Book1.csv"") print(df.head())
+Temperature_C = 'Temperature' Humidity_pct = 'Humidity' plt.figure(figsize=(10, 6))
+sns.scatterplot(x='Temperature_C', y='Humidity_pct', data=df, s=100, color='b') plt.title('Scatter Plot: Temperature vs. Humidity', fontsize=16) plt.xlabel(f'{Temperature_C} (°C)', fontsize=14)
+plt.ylabel(f'{Humidity_pct} (%)', fontsize=14) plt.show()
+Output:
+Histogram:
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv(""D:/Naveed/Clg/SEM 5/Book1.csv"") print(df.head())
+Temperature_C = 'Temperature' Humidity_pct = 'Humidity' plt.figure(figsize=(10, 6))
+plt.hist(df[""Temperature_C""], bins=20, color='skyblue', edgecolor='black') plt.title(f'Histogram of {""Temperature ""}', fontsize=16) plt.xlabel(f'{""Temperature"" } (°C)', fontsize=14)
+plt.ylabel('Frequency', fontsize=14) plt.show()
+Output:
+Horizontal Bar Chart:
+Program code:
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv(""D:/Naveed/Clg/SEM 5/Book1.csv"") print(df.head())
+Temperature_C = 'Temperature' Humidity_pct = 'Humidity' plt.figure(figsize=(10, 6))
+plt.barh(df[""Humidity_pct""], df[""Temperature_C""], color='skyblue') plt.title(f'Horizontal Bar Chart of {""Temperature""} vs {""Humidity""}', fontsize=16) plt.xlabel(f'{""Temperature""}', fontsize=14)
+plt.ylabel(f'{""Humidity""}', fontsize=14) plt.show()
+Output:
+Time Series Graph:
+
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv(""D:/Naveed/Clg/SEM 5/Book1.csv"") Date_Time = 'Date'
+Temperature_C = 'Temperature'
+df[""Date_Time""] = pd.to_datetime(df[""Date_Time""]) df = df.sort_values(by=""Date_Time"") plt.figure(figsize=(10, 6))
+plt.plot(df[""Date_Time""], df[""Temperature_C""], marker='o', color='b') plt.title(f'Time Series of {""Temperature""} over Time', fontsize=16) plt.xlabel('Date', fontsize=14)
+plt.ylabel('Temperature', fontsize=14) plt.show()
+"
+3,"import pandas as pd import scipy.stats as stats
+file_path = ""D:/Naveed/Clg/SEM 5/archive/smoking.csv"" df = pd.read_csv(file_path)
+contingency_table = pd.crosstab(df['gender'], df['smoke'])
+chi2_stat, p_value, dof, expected = stats.chi2_contingency(contingency_table) alpha = 0.05
+print(f""Chi-Square Statistic: {chi2_stat:.4f}"") print(f""P-Value: {p_value:.4f}"") print(f""Degrees of Freedom: {dof}"") print(f""Expected Frequencies:\n{expected}"") if p_value <= alpha:
+print(""Reject H0: There is a significant association between gender and smoking behavior."") else:
+print(""Retain H0: No significant association between gender and smoking behavior."")
+Output:
+(Annova-F Test)
+Program code:
+import pandas as pd import scipy.stats as stats
+data = ""D:/Naveed/Clg/SEM 5/archive/smoking.csv"" df = pd.read_csv(data)
+df['age'] = pd.to_numeric(df['age'], errors='coerce') df = df.dropna(subset=['age', 'smoke'])
+groups = [df[df[""smoke""] == status][""age""] for status in df[""smoke""].unique()] f_stat, p_value = stats.f_oneway(*groups)
+alpha = 0.05
+print(f""F-Statistic: {f_stat:.4f}"") print(f""P-Value: {p_value:.4f}"") print(f""Significance Level: {alpha}"") if p_value <= alpha:
+print(""Reject H0: There is a significant difference in age between smokers and non-smokers."") else:
+print(""Retain H0: No significant difference in age between smokers and non-smokers."")
+"
+4,"import numpy as np import pandas as pd
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler import matplotlib.pyplot as plt
+df = pd.read_csv(""D:/Naveed/Clg/SEM 5/New folder/wine.csv"")A X = df.iloc[:, :-1]
+y = df.iloc[:, -1]
+scaler = StandardScaler() X_scaled = scaler.fit_transform(X) pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+print(f""Explained variance ratio: {pca.explained_variance_ratio_}"") plt.figure(figsize=(8, 6))
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='viridis') plt.xlabel('First Principal Component') plt.ylabel('Second Principal Component')
+plt.title('PCA Dimensionality Reduction') plt.colorbar(label='Target')
+"
+5,"import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression from sklearn.feature_selection import RFE
+data = load_iris()
+X = data.data y = data.target
+feature_names = data.feature_names
+model = LogisticRegression(max_iter=1000)
+rfe = RFE(model, n_features_to_select=2) # Select the top 2 features rfe = rfe.fit(X, y)
+feature_ranking = rfe.ranking_ selected_features = rfe.support_
+print(""Feature Ranking (1 means the most important):"") for i, name in enumerate(feature_names):
+print(f""{name}: {feature_ranking[i]}"")
+plt.figure(figsize=(10, 6))
+plt.barh(feature_names, feature_ranking, color='skyblue') plt.xlabel('Ranking')
+plt.title('Feature Importance Using RFE') plt.gca().invert_yaxis()
+plt.show()
+"
+6,"import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix import matplotlib.pyplot as plt
+from sklearn import tree iris = load_iris()
+X = iris.data y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42) clf = DecisionTreeClassifier()
+clf.fit(X_train, y_train) y_pred = clf.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred) print(f""Accuracy: {accuracy:.2f}"")
+print(""\nClassification Report:\n"", classification_report(y_test, y_pred)) print(""\nConfusion Matrix:\n"", confusion_matrix(y_test, y_pred)) plt.figure(figsize=(12, 8))
+tree.plot_tree(clf, filled=True, feature_names=iris.feature_names, class_names=iris.target_names, rounded=True)
+plt.title(""Decision Tree Visualization"") plt.show()
+"
+7,"import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split from sklearn.neighbors import KNeighborsClassifier from sklearn.metrics import accuracy_score
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42) knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train) y_pred = knn.predict(X_test)
+print(f""Accuracy: {accuracy_score(y_test, y_pred):.2f}"") plt.scatter(X_test[:, 0], X_test[:, 1], c=y_pred, cmap='viridis', edgecolor='k') plt.title('KNN Clustering Visualization')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2') plt.show()"
+8,"import numpy as np import pandas as pd
+from sklearn.datasets import load_breast_cancer from sklearn.model_selection import train_test_split from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix import seaborn as sns
+import matplotlib.pyplot as plt data = load_breast_cancer()
+X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.3, random_state=42)
+gnb = GaussianNB().fit(X_train, y_train) y_pred = gnb.predict(X_test)
+print(f""Accuracy: {accuracy_score(y_test, y_pred):.2f}"") print(classification_report(y_test, y_pred, target_names=data.target_names))
+sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='d', cmap='Blues', xticklabels=data.target_names, yticklabels=data.target_names)
+plt.xlabel('Predicted') plt.ylabel('True') plt.title('Confusion Matrix') plt.show()
+"
+9,"import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_california_housing from sklearn.model_selection import train_test_split from sklearn.linear_model import LinearRegression from sklearn.metrics import r2_score
+data = fetch_california_housing() X = data.data[:, 0].reshape(-1, 1) y = data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) model = LinearRegression()
+model.fit(X_train, y_train) y_pred = model.predict(X_test) r2 = r2_score(y_test, y_pred)
+print(f""R² (Goodness of Fit): {r2:.2f}"")
+X_future = np.array([[8], [9], [10]]) y_future_pred = model.predict(X_future)
+plt.scatter(X_test, y_test, color='blue', label='Actual') plt.plot(X_test, y_pred, color='red', label='Regression Line')
+plt.scatter(X_future, y_future_pred, color='green', marker='x', s=100, label='Future Predictions') plt.legend()
+plt.show()
+"
+10,"import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_california_housing from sklearn.model_selection import train_test_split from sklearn.linear_model import LinearRegression from sklearn.metrics import r2_score
+data = fetch_california_housing()
+X = data.data y = data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) model = LinearRegression()
+model.fit(X_train, y_train) y_pred = model.predict(X_test) r2 = r2_score(y_test, y_pred)
+print(f""R² (Goodness of Fit): {r2:.2f}"")
+X_future = np.array([[8, 30, 4, 1, 1000, 3000, 2, 35],
+[9, 40, 5, 2, 1200, 3500, 3, 40]])
+y_future_pred = model.predict(X_future) print(""\nPredicted future values:"")
+for i, pred in enumerate(y_future_pred):
+print(f""Future Data {i+1} => Predicted Price: {pred:.2f}"") plt.scatter(y_test, y_pred, color='blue', label='Actual vs Predicted')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', label='Ideal Fit') plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices') plt.legend()
+plt.show()
+"
+11,"import numpy as np
+from sklearn.datasets import load_diabetes from sklearn.tree import DecisionTreeRegressor
+from sklearn.model_selection import train_test_split from sklearn.metrics import r2_score
+from joblib import Parallel, delayed
+X, y = load_diabetes(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) def train_on_chunk(X_chunk, y_chunk):
+model = DecisionTreeRegressor() model.fit(X_chunk, y_chunk) return model
+chunks = np.array_split(np.arange(X_train.shape[0]), 4)
+models = Parallel(n_jobs=4)(delayed(train_on_chunk)(X_train[chunk], y_train[chunk]) for chunk in chunks)
+y_pred = np.mean([model.predict(X_test) for model in models], axis=0)= r2 = r2_score(y_test, y_pred)
+print(f""R²: {r2:.2f}"")
+plt.scatter(y_test, y_pred, color='blue', label='Predicted vs Actual')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', label='Ideal Fit') plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.title('Actual vs Predicted (Distributed Decision Trees)') plt.legend()
+plt.show()
+"
