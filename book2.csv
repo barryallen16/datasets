@@ -1,0 +1,193 @@
+﻿no,program
+1,"if (!require(""dplyr"")) {
+  install.packages(""dplyr"")
+}
+library(dplyr)
+
+get_mode <- function(v) {
+  uniq_v <- unique(v)
+  uniq_v[which.max(tabulate(match(v, uniq_v)))]
+}
+
+data_vector <- c(2, 3, 5, 3, 8, 3, 4, 5, 8, 9)
+
+mean_value <- mean(data_vector)
+median_value <- median(data_vector)
+mode_value <- get_mode(data_vector)
+
+cat(""Mean:"", mean_value, ""\n"")
+cat(""Median:"", median_value, ""\n"")
+cat(""Mode:"", mode_value, ""\n"")"
+2,"data_vector <- c(12, 15, 14, 10, 18, 20, 25, 30, 22, 28)
+
+quartiles <- quantile(data_vector)
+std_dev <- sd(data_vector)
+
+cat(""Quartiles:\n"")
+print(quartiles)
+cat(""\nStandard Deviation:"", std_dev, ""\n"")"
+3,"if (!require(""ggplot2"")) {
+  install.packages(""ggplot2"")
+}
+library(ggplot2)
+
+mean_normal <- 0
+sd_normal <- 1
+x_values_normal <- seq(-4, 4, by = 0.1)
+
+normal_probabilities <- dnorm(x_values_normal, mean = mean_normal, sd = sd_normal)
+
+normal_df <- data.frame(x = x_values_normal, y = normal_probabilities)
+
+ggplot(normal_df, aes(x, y)) + 
+  geom_line(color = ""blue"") +
+  geom_area(aes(y = y), fill = ""lightblue"", alpha = 0.5) + 
+  ggtitle(""Normal Distribution (mean = 0, sd = 1)"") +
+  xlab(""Value"") + ylab(""Density"") + theme_minimal()
+
+cat(""Normal Distribution Probabilities:\n"")
+for (value in c(-2, 0, 2)) {
+  prob <- dnorm(value, mean = mean_normal, sd = sd_normal)
+  cat(""P(X ="", value, "") ="", prob, ""\n"")
+}"
+4,"bayes_theorem <- function(prior_A, prior_B, likelihood_A_given_B, likelihood_B) { 
+  posterior_A_given_B <- (likelihood_A_given_B * prior_A) / likelihood_B 
+  return(posterior_A_given_B) 
+}
+
+prior_A <- 0.1
+prior_B <- 0.2
+likelihood_A_given_B <- 0.9
+likelihood_B <- (likelihood_A_given_B * prior_A) + (0.5 * (1 - prior_A))
+
+posterior_A_given_B <- bayes_theorem(prior_A, prior_B, likelihood_A_given_B, likelihood_B)
+
+cat(""P(A):"", prior_A, ""\n"")
+cat(""P(B):"", prior_B, ""\n"")
+cat(""P(A | B):"", posterior_A_given_B, ""\n"")"
+5,"data_vector <- c(25, 30, 35, 40, 28, 32, 31, 29, 33, 34)
+
+variance <- var(data_vector)
+std_dev <- sd(data_vector)
+iqr_value <- IQR(data_vector)
+
+cat(""Standard Deviation:"", std_dev, ""\n"")
+cat(""Interquartile Range (IQR):"", iqr_value, ""\n"")"
+6,"set.seed(42)
+data <- data.frame(
+  Height = rnorm(100, mean = 170, sd = 10), 
+  Weight = rnorm(100, mean = 65, sd = 10)
+)
+
+data$Weight <- data$Weight + 0.7 * (data$Height - 170)
+correlation_coefficient <- cor(data$Height, data$Weight)
+cat(""Correlation coefficient between Height and Weight:"", correlation_coefficient, ""\n"")"
+7,"library(ggplot2)
+
+mean_normal <- 50
+sd_normal <- 10
+n_normal <- 1000
+
+normal_samples <- rnorm(n_normal, mean = mean_normal, sd = sd_normal)
+
+prob_normal_45 <- pnorm(45, mean = mean_normal, sd = sd_normal)
+prob_normal_55 <- pnorm(55, mean = mean_normal, sd = sd_normal)
+
+cat(""Probability P(X <= 45):"", prob_normal_45, ""\n"")
+cat(""Probability P(X <= 55):"", prob_normal_55, ""\n"")
+
+ggplot(data.frame(x = normal_samples), aes(x)) + 
+  geom_density(fill = ""lightblue"", alpha = 0.5) + 
+  labs(title = ""Normal Distribution (mean = 50, sd = 10)"",
+       x = ""Value"",
+       y = ""Density"") + 
+  theme_minimal()
+
+size_binomial <- 10
+prob_success <- 0.5
+n_binomial <- 1000
+
+binomial_samples <- rbinom(n_binomial, size = size_binomial, prob = prob_success)
+
+prob_binomial_5 <- pbinom(5, size = size_binomial, prob = prob_success)
+
+cat(""Probability P(X <= 5):"", prob_binomial_5, ""\n"")
+
+binom_df <- data.frame(successes = 0:size_binomial,
+                       probability = dbinom(0:size_binomial, size = size_binomial, prob = prob_success))
+
+ggplot(binom_df, aes(x = successes, y = probability)) + 
+  geom_bar(stat = ""identity"", fill = ""lightgreen"") + 
+  labs(title = ""Binomial Distribution (n = 10, p = 0.5)"",
+       x = ""Number of Successes"", y = ""Probability"") +
+  theme_minimal()"
+8,"library(dplyr)
+
+set.seed(123)
+
+sample_size <- 30
+population_mean <- 100
+sample_data <- rnorm(sample_size, mean = 102, sd = 15)
+
+sample_mean <- mean(sample_data)
+sample_sd <- sd(sample_data)
+
+cat(""Sample Mean:"", sample_mean, ""\n"")
+cat(""Sample Standard Deviation:"", sample_sd, ""\n"")
+
+mu <- population_mean
+
+t_test_result <- t.test(sample_data, mu = mu)
+
+cat(""t-statistic:"", t_test_result$statistic, ""\n"")
+cat(""p-value:"", t_test_result$p.value, ""\n"")
+cat(""Confidence Interval:"", t_test_result$conf.int, ""\n"")
+cat(""Sample Mean:"", t_test_result$estimate, ""\n"")
+cat(""Null Hypothesis (H0): Sample mean is equal to population mean ("", mu, "")\n"", sep = """")
+cat(""Alternative Hypothesis (H1): Sample mean is not equal to population mean ("", mu, "")\n"", sep = """")
+
+if (t_test_result$p.value < 0.05) {
+  cat(""Reject the null hypothesis: There is a significant difference between the sample mean and the population mean.\n"")
+} else {
+  cat(""Fail to reject the null hypothesis: There is no significant difference between the sample mean and the population mean.\n"")
+}"
+9,"library(ggplot2)
+
+data(mtcars)
+
+simple_model <- lm(mpg ~ wt, data = mtcars)
+summary(simple_model)
+
+ggplot(mtcars, aes(x = wt, y = mpg)) + 
+  geom_point() +
+  geom_smooth(method = ""lm"", se = FALSE, color = ""blue"") + 
+  labs(title = ""Simple Linear Regression: MPG vs Weight"",
+       x = ""Weight of Car (1000 lbs)"", 
+       y = ""Miles Per Gallon (MPG)"")
+
+multiple_model <- lm(mpg ~ wt + hp + drat, data = mtcars)
+summary(multiple_model)
+
+mtcars$predicted_mpg <- predict(multiple_model, newdata = mtcars)
+head(mtcars)
+
+ggplot(mtcars, aes(x = mpg, y = predicted_mpg)) + 
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = ""red"") + 
+  labs(title = ""Actual vs Predicted MPG"",
+       x = ""Actual MPG"", 
+       y = ""Predicted MPG"") + 
+  theme_minimal()"
+10,"data <- matrix(c(30, 10, 20, 40), nrow = 2, byrow = TRUE)
+rownames(data) <- c(""Group 1"", ""Group 2"")
+colnames(data) <- c(""Product A"", ""Product B"")
+print(""Contingency Table:"")
+print(data)
+chi_square_result <- chisq.test(data)
+print(""Chi-Square Test Result:"")
+print(chi_square_result)
+if (chi_square_result$p.value < 0.05) {
+  print(""Reject the null hypothesis: There is a significant association between the groups and product preferences."")
+} else {
+  print(""Fail to reject the null hypothesis: There is no significant association between the groups and product preferences."")
+}"
