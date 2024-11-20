@@ -50,21 +50,20 @@ for (value in c(-2, 0, 2)) {
   prob <- dnorm(value, mean = mean_normal, sd = sd_normal)
   cat(""P(X ="", value, "") ="", prob, ""\n"")
 }"
-4,"bayes_theorem <- function(prior_A, prior_B, likelihood_A_given_B, likelihood_B) { 
-  posterior_A_given_B <- (likelihood_A_given_B * prior_A) / likelihood_B 
+4,"bayes_theorem <- function(prior_A, likelihood_B_given_A, total_probability_B) { 
+  posterior_A_given_B <- (likelihood_B_given_A * prior_A) / total_probability_B 
   return(posterior_A_given_B) 
 }
 
 prior_A <- 0.1
-prior_B <- 0.2
-likelihood_A_given_B <- 0.9
-likelihood_B <- (likelihood_A_given_B * prior_A) + (0.5 * (1 - prior_A))
+likelihood_B_given_A <- 0.9
+total_probability_B <- (likelihood_B_given_A * prior_A) + (0.5 * (1 - prior_A))
 
-posterior_A_given_B <- bayes_theorem(prior_A, prior_B, likelihood_A_given_B, likelihood_B)
+posterior_A_given_B <- bayes_theorem(prior_A, likelihood_B_given_A, total_probability_B)
 
-cat(""P(A):"", prior_A, ""\n"")
-cat(""P(B):"", prior_B, ""\n"")
-cat(""P(A | B):"", posterior_A_given_B, ""\n"")"
+cat("P(A):", prior_A, "\n")
+cat("P(B):", total_probability_B, "\n")
+cat("P(A | B):", posterior_A_given_B, "\n")"
 5,"data_vector <- c(25, 30, 35, 40, 28, 32, 31, 29, 33, 34)
 
 variance <- var(data_vector)
